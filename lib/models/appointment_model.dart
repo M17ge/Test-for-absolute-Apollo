@@ -16,6 +16,13 @@ enum CertificationType {
   other
 }
 
+enum PaymentStatus {
+  pending,
+  approved,
+  rejected,
+  paid
+}
+
 class Appointment {
   final String id;
   final String farmerId;
@@ -30,6 +37,10 @@ class Appointment {
   final bool certificateIssued;
   final DateTime? certificateIssuedDate;
   final DateTime createdAt;
+  final double courseFee;
+  final PaymentStatus paymentStatus;
+  final String? financeManagerId;
+  final DateTime? paymentApprovedDate;
 
   Appointment({
     required this.id,
@@ -45,6 +56,10 @@ class Appointment {
     this.certificateIssued = false,
     this.certificateIssuedDate,
     required this.createdAt,
+    this.courseFee = 0,
+    this.paymentStatus = PaymentStatus.pending,
+    this.financeManagerId,
+    this.paymentApprovedDate,
   });
 
   factory Appointment.fromMap(Map<String, dynamic> map, String id) {
@@ -70,6 +85,15 @@ class Appointment {
           ? DateTime.parse(map['certificateIssuedDate']) 
           : null,
       createdAt: DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
+      courseFee: (map['courseFee'] ?? 0).toDouble(),
+      paymentStatus: PaymentStatus.values.firstWhere(
+        (e) => e.toString() == 'PaymentStatus.${map['paymentStatus']}',
+        orElse: () => PaymentStatus.pending,
+      ),
+      financeManagerId: map['financeManagerId'],
+      paymentApprovedDate: map['paymentApprovedDate'] != null 
+          ? DateTime.parse(map['paymentApprovedDate']) 
+          : null,
     );
   }
 
@@ -87,6 +111,10 @@ class Appointment {
       'certificateIssued': certificateIssued,
       'certificateIssuedDate': certificateIssuedDate?.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
+      'courseFee': courseFee,
+      'paymentStatus': paymentStatus.toString().split('.').last,
+      'financeManagerId': financeManagerId,
+      'paymentApprovedDate': paymentApprovedDate?.toIso8601String(),
     };
   }
 }

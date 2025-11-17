@@ -2,17 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/credit_provider.dart';
+import '../../providers/appointment_provider.dart';
 import '../../models/credit_model.dart';
+import '../../models/appointment_model.dart';
 import '../../utils/helpers.dart';
 import '../credits/credit_list_screen.dart';
+import '../appointments/payment_requests_screen.dart';
 
-class FinanceHomeScreen extends StatelessWidget {
+class FinanceHomeScreen extends StatefulWidget {
   const FinanceHomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<FinanceHomeScreen> createState() => _FinanceHomeScreenState();
+}
+
+class _FinanceHomeScreenState extends State<FinanceHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AppointmentProvider>(context, listen: false)
+          .loadPendingPaymentRequests();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final creditProvider = Provider.of<CreditProvider>(context);
+    final appointmentProvider = Provider.of<AppointmentProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -79,10 +97,10 @@ class FinanceHomeScreen extends StatelessWidget {
                 ),
                 _buildStatCard(
                   context,
-                  'Amount Due',
-                  AppHelpers.formatCurrency(creditProvider.getTotalAmountDue()),
-                  Icons.warning,
-                  Colors.red,
+                  'Payment Requests',
+                  '${appointmentProvider.pendingPaymentRequests.length}',
+                  Icons.payment,
+                  Colors.purple,
                 ),
               ],
             ),
@@ -96,6 +114,20 @@ class FinanceHomeScreen extends StatelessWidget {
               },
               icon: const Icon(Icons.list),
               label: const Text('View All Credits'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PaymentRequestsScreen()),
+                );
+              },
+              icon: const Icon(Icons.payment),
+              label: const Text('View Payment Requests'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.purple,
+              ),
             ),
           ],
         ),

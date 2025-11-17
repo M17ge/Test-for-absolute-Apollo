@@ -55,7 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mounted) {
       if (success) {
-        Navigator.of(context).pushReplacementNamed('/home');
+        // Navigate to pending courses screen for farmers, otherwise go to home
+        if (authProvider.appUser?.role == UserRole.farmer) {
+          Navigator.of(context).pushReplacementNamed('/pending-courses');
+        } else {
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
       } else {
         AppHelpers.showSnackBar(
           context,
