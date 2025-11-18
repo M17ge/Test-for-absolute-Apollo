@@ -1,6 +1,6 @@
-# Contributing to Apollo Agro
+# Contributing to Apollo Agriculture
 
-Thank you for your interest in contributing to Apollo Agro! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to Apollo Agriculture! This document provides guidelines for contributing to the project.
 
 ## Code of Conduct
 
@@ -295,4 +295,4 @@ Contributors will be recognized in:
 - Release notes
 - Project documentation
 
-Thank you for contributing to Apollo Agro! 🌾
+Thank you for contributing to Apollo Agriculture! 🌾

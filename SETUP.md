@@ -1,4 +1,4 @@
-# Setup Guide for Apollo Agro
+# Setup Guide for Apollo Agriculture
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ flutter pub get
 
 1. Go to [Firebase Console](https://console.firebase.google.com)
 2. Click "Add project"
-3. Name your project (e.g., "Apollo Agro")
+3. Name your project (e.g., "Apollo Agriculture")
 4. Follow the setup wizard
 
 #### B. Enable Firebase Services

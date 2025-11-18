@@ -1,8 +1,8 @@
-# Apollo Agro - Architecture Documentation
+# Apollo Agriculture - Architecture Documentation
 
 ## System Overview
 
-Apollo Agro is a multi-role agricultural e-commerce platform built with Flutter and Firebase. The application follows a clean architecture pattern with clear separation of concerns.
+Apollo Agriculture is a multi-role agricultural e-commerce platform built with Flutter and Firebase. The application follows a clean architecture pattern with clear separation of concerns.
 
 ## Architecture Layers
 

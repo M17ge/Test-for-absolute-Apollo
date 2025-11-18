@@ -38,7 +38,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Apollo Agro'),
+        title: const Text('Apollo Agriculture'),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),

@@ -1,5 +1,5 @@
-name: apollo_agro
-description: E-commerce agricultural app for farmers with multi-role user management
+name: apollo_agriculture
+description: Apollo Agriculture - E-commerce agricultural app for farmers with multi-role user management
 publish_to: 'none'
 version: 1.0.0+1
 

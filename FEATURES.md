@@ -1,4 +1,4 @@
-# Apollo Agro - Features List
+# Apollo Agriculture - Features List
 
 ## User Management
 

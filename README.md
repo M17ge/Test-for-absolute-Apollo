@@ -1,10 +1,10 @@
-# Apollo Agro - Agricultural E-Commerce Platform
+# Apollo Agriculture - Agricultural E-Commerce Platform
 
 A comprehensive Flutter-based e-commerce application for agricultural products and services, built with Firebase backend integration.
 
 ## Overview
 
-Apollo Agro is a multi-role agricultural platform that connects farmers with essential products, services, and credit facilities. The platform supports various user roles including farmers, finance managers, inventory managers, suppliers, drivers, dispatch managers, and trainers.
+Apollo Agriculture is a multi-role agricultural platform that connects farmers with essential products, services, and credit facilities. The platform supports various user roles including farmers, finance managers, inventory managers, suppliers, drivers, dispatch managers, and trainers.
 
 ## Features
 

@@ -1,7 +1,7 @@
 # New Features V3 - User Approval & Role Management System
 
 ## Overview
-This document outlines the latest additions to the Apollo Agro platform, focusing on user registration, approval workflows, and comprehensive admin user management capabilities.
+This document outlines the latest additions to the Apollo Agriculture platform, focusing on user registration, approval workflows, and comprehensive admin user management capabilities.
 
 ## 🔐 User Approval System
 
