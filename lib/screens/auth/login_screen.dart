@@ -21,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   // For sign up
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  UserRole _selectedRole = UserRole.farmer;
 
   @override
   void dispose() {
@@ -37,20 +36,45 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     bool success = false;
+    String? errorMessage;
 
     if (_isSignUp) {
-      success = await authProvider.signUp(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-        name: _nameController.text.trim(),
-        phone: _phoneController.text.trim(),
-        role: _selectedRole,
-      );
+      try {
+        success = await authProvider.signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          name: _nameController.text.trim(),
+          phone: _phoneController.text.trim(),
+          role: UserRole.farmer, // Always farmer for self-registration
+        );
+        
+        if (success) {
+          // Show success message for sign up
+          if (mounted) {
+            AppHelpers.showSnackBar(
+              context,
+              'Account created successfully! Please wait for admin approval before logging in.',
+              isError: false,
+            );
+            // Switch back to login mode
+            setState(() {
+              _isSignUp = false;
+            });
+          }
+          return; // Don't navigate, let user login after approval
+        }
+      } catch (e) {
+        errorMessage = e.toString();
+      }
     } else {
-      success = await authProvider.signIn(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
+      try {
+        success = await authProvider.signIn(
+          _emailController.text.trim(),
+          _passwordController.text,
+        );
+      } catch (e) {
+        errorMessage = e.toString();
+      }
     }
 
     if (mounted) {
@@ -62,9 +86,18 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.of(context).pushReplacementNamed('/home');
         }
       } else {
+        // Show appropriate error message
+        String displayMessage = _isSignUp 
+            ? 'Sign up failed. Please try again.' 
+            : 'Invalid credentials or account not approved';
+        
+        if (errorMessage != null && errorMessage.contains('pending approval')) {
+          displayMessage = 'Your account is pending approval from an administrator. Please try again later.';
+        }
+        
         AppHelpers.showSnackBar(
           context,
-          _isSignUp ? 'Sign up failed. Please try again.' : 'Invalid credentials',
+          displayMessage,
           isError: true,
         );
       }
@@ -196,34 +229,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-
-                  // Role selector (sign up only)
-                  if (_isSignUp) ...[
-                    DropdownButtonFormField<UserRole>(
-                      value: _selectedRole,
-                      decoration: const InputDecoration(
-                        labelText: 'Role',
-                        prefixIcon: Icon(Icons.work),
-                      ),
-                      items: UserRole.values.map((role) {
-                        return DropdownMenuItem(
-                          value: role,
-                          child: Text(
-                            role.toString().split('.').last.replaceAllMapped(
-                                  RegExp(r'([A-Z])'),
-                                  (match) => ' ${match.group(0)}',
-                                ).trim(),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedRole = value!;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                  ],
 
                   const SizedBox(height: 24),
 

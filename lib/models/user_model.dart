@@ -19,6 +19,9 @@ class AppUser {
   final String? photoUrl;
   final DateTime createdAt;
   final bool isActive;
+  final bool isApproved;
+  final String? approvedBy;
+  final DateTime? approvedAt;
   final Map<String, dynamic>? metadata;
 
   AppUser({
@@ -30,6 +33,9 @@ class AppUser {
     this.photoUrl,
     required this.createdAt,
     this.isActive = true,
+    this.isApproved = false,
+    this.approvedBy,
+    this.approvedAt,
     this.metadata,
   });
 
@@ -46,6 +52,9 @@ class AppUser {
       photoUrl: map['photoUrl'],
       createdAt: DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
       isActive: map['isActive'] ?? true,
+      isApproved: map['isApproved'] ?? false,
+      approvedBy: map['approvedBy'],
+      approvedAt: map['approvedAt'] != null ? DateTime.parse(map['approvedAt']) : null,
       metadata: map['metadata'],
     );
   }
@@ -59,6 +68,9 @@ class AppUser {
       'photoUrl': photoUrl,
       'createdAt': createdAt.toIso8601String(),
       'isActive': isActive,
+      'isApproved': isApproved,
+      'approvedBy': approvedBy,
+      'approvedAt': approvedAt?.toIso8601String(),
       'metadata': metadata,
     };
   }
@@ -71,6 +83,9 @@ class AppUser {
     String? photoUrl,
     DateTime? createdAt,
     bool? isActive,
+    bool? isApproved,
+    String? approvedBy,
+    DateTime? approvedAt,
     Map<String, dynamic>? metadata,
   }) {
     return AppUser(
@@ -82,6 +97,9 @@ class AppUser {
       photoUrl: photoUrl ?? this.photoUrl,
       createdAt: createdAt ?? this.createdAt,
       isActive: isActive ?? this.isActive,
+      isApproved: isApproved ?? this.isApproved,
+      approvedBy: approvedBy ?? this.approvedBy,
+      approvedAt: approvedAt ?? this.approvedAt,
       metadata: metadata ?? this.metadata,
     );
   }
