@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo Agriculture - Activity Records</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2E7D32;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            padding: 10px 20px;
+            background: #2E7D32;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-item:hover {
+            background: #1B5E20;
+        }
+        
+        .report-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .report-section h2 {
+            color: #2E7D32;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #2E7D32;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-item label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2E7D32;
+        }
+        
+        .filter-item select, .filter-item input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .badge-order { background: #2196F3; color: white; }
+        .badge-credit { background: #FF9800; color: white; }
+        .badge-appointment { background: #9C27B0; color: white; }
+        .badge-product { background: #4CAF50; color: white; }
+        .badge-attendance { background: #00BCD4; color: white; }
+        .badge-receipt { background: #F44336; color: white; }
+        
+        .export-button {
+            padding: 10px 20px;
+            background: #FFB300;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .export-button:hover {
+            background: #FFA000;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Activity Records & Reports</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-item">Dashboard</a>
+                <a href="reports.html" class="nav-item">Reports</a>
+                <a href="records.html" class="nav-item">Activity Records</a>
+                <a href="receipts.html" class="nav-item">Receipts</a>
+                <a href="users.html" class="nav-item">Users</a>
+                <a href="products.html" class="nav-item">Products</a>
+            </nav>
+        </header>
+        
+        <div class="report-section">
+            <h2>Activity Summary</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Records</div>
+                    <div class="stat-value">1,247</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Orders</div>
+                    <div class="stat-value">423</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Credits</div>
+                    <div class="stat-value">156</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Appointments</div>
+                    <div class="stat-value">234</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Attendance Marked</div>
+                    <div class="stat-value">198</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Receipts Generated</div>
+                    <div class="stat-value">345</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Activity Records</h2>
+            
+            <div class="filter-section">
+                <div class="filter-item">
+                    <label for="recordType">Record Type</label>
+                    <select id="recordType">
+                        <option value="all">All Types</option>
+                        <option value="order">Orders</option>
+                        <option value="credit">Credits</option>
+                        <option value="appointment">Appointments</option>
+                        <option value="product">Products</option>
+                        <option value="attendance">Attendance</option>
+                        <option value="receipt">Receipts</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="filter-item">
+                    <label for="endDate">End Date</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="filter-item" style="justify-content: flex-end;">
+                    <label>&nbsp;</label>
+                    <button class="export-button" onclick="exportRecords()">📥 Export CSV</button>
+                </div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Type</th>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Entity</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024-01-18 10:30:45</td>
+                        <td><span class="badge badge-order">ORDER</span></td>
+                        <td>John Smith</td>
+                        <td>Farmer</td>
+                        <td>Order #1234</td>
+                        <td>Order created - $350.00</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 10:25:12</td>
+                        <td><span class="badge badge-appointment">APPOINTMENT</span></td>
+                        <td>Jane Manager</td>
+                        <td>Service Manager</td>
+                        <td>Appointment #567</td>
+                        <td>Trainer assigned - Organic Farming</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 10:20:33</td>
+                        <td><span class="badge badge-credit">CREDIT</span></td>
+                        <td>Bob Finance</td>
+                        <td>Finance Manager</td>
+                        <td>Credit #789</td>
+                        <td>Credit approved - $5,000</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 10:15:18</td>
+                        <td><span class="badge badge-attendance">ATTENDANCE</span></td>
+                        <td>Sarah Trainer</td>
+                        <td>Trainer</td>
+                        <td>Session #234</td>
+                        <td>Attendance marked - Present</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 10:10:55</td>
+                        <td><span class="badge badge-product">PRODUCT</span></td>
+                        <td>Mike Inventory</td>
+                        <td>Inventory Manager</td>
+                        <td>Product #456</td>
+                        <td>Stock updated - Maize Seeds</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 10:05:42</td>
+                        <td><span class="badge badge-receipt">RECEIPT</span></td>
+                        <td>Bob Finance</td>
+                        <td>Finance Manager</td>
+                        <td>Receipt #901</td>
+                        <td>Receipt generated and approved</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 09:55:27</td>
+                        <td><span class="badge badge-appointment">APPOINTMENT</span></td>
+                        <td>John Smith</td>
+                        <td>Farmer</td>
+                        <td>Appointment #568</td>
+                        <td>Appointment booked - Pest Control</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18 09:45:11</td>
+                        <td><span class="badge badge-credit">CREDIT</span></td>
+                        <td>Alice Farmer</td>
+                        <td>Farmer</td>
+                        <td>Credit #790</td>
+                        <td>Credit requested - $3,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <footer>
+            <p>&copy; 2024 Apollo Agriculture. All rights reserved.</p>
+            <p>Comprehensive Activity Tracking & Reporting System</p>
+        </footer>
+    </div>
+    
+    <script>
+        function exportRecords() {
+            alert('Exporting activity records to CSV...');
+            // In production, this would generate and download a CSV file
+        }
+        
+        // Mock filter functionality
+        document.getElementById('recordType').addEventListener('change', function() {
+            console.log('Filter by type:', this.value);
+        });
+        
+        document.getElementById('startDate').addEventListener('change', function() {
+            console.log('Start date:', this.value);
+        });
+        
+        document.getElementById('endDate').addEventListener('change', function() {
+            console.log('End date:', this.value);
+        });
+    </script>
+</body>
+</html>

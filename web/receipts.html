@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo Agriculture - Receipts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2E7D32;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            padding: 10px 20px;
+            background: #2E7D32;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-item:hover {
+            background: #1B5E20;
+        }
+        
+        .report-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .report-section h2 {
+            color: #2E7D32;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .receipt-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+        
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #2E7D32;
+        }
+        
+        .receipt-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+        
+        .receipt-status {
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .status-approved { background: #4CAF50; color: white; }
+        .status-paid { background: #2196F3; color: white; }
+        .status-pending { background: #FF9800; color: white; }
+        
+        .receipt-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .receipt-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E7D32;
+            text-align: right;
+        }
+        
+        .approval-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .download-button {
+            padding: 8px 16px;
+            background: #2E7D32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .download-button:hover {
+            background: #1B5E20;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧾 Transaction Receipts</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-item">Dashboard</a>
+                <a href="reports.html" class="nav-item">Reports</a>
+                <a href="records.html" class="nav-item">Activity Records</a>
+                <a href="receipts.html" class="nav-item">Receipts</a>
+                <a href="users.html" class="nav-item">Users</a>
+            </nav>
+        </header>
+        
+        <div class="report-section">
+            <h2>Receipt Summary</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Receipts</div>
+                    <div class="stat-value">345</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Approved</div>
+                    <div class="stat-value">298</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Paid</div>
+                    <div class="stat-value">245</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Amount</div>
+                    <div class="stat-value">$89,450</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="report-section">
+            <h2>Recent Receipts</h2>
+            
+            <!-- Receipt 1 - Order -->
+            <div class="receipt-card">
+                <div class="receipt-header">
+                    <div>
+                        <div class="receipt-number">Receipt #RCP-1001</div>
+                        <div style="color: #666; font-size: 14px;">Order Receipt</div>
+                    </div>
+                    <span class="receipt-status status-approved">✓ APPROVED</span>
+                </div>
+                <div class="receipt-details">
+                    <div class="detail-item">
+                        <span class="detail-label">FARMER</span>
+                        <span class="detail-value">John Smith</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DATE</span>
+                        <span class="detail-value">Jan 18, 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DESCRIPTION</span>
+                        <span class="detail-value">Maize Seeds (50kg) + Fertilizer</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">ORDER ID</span>
+                        <span class="detail-value">#ORD-1234</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="approval-badge">
+                        ✓ Approved by Bob Finance
+                    </div>
+                    <div class="receipt-amount">$350.00</div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="download-button" onclick="downloadReceipt('RCP-1001')">📥 Download PDF</button>
+                </div>
+            </div>
+            
+            <!-- Receipt 2 - Credit -->
+            <div class="receipt-card">
+                <div class="receipt-header">
+                    <div>
+                        <div class="receipt-number">Receipt #RCP-1002</div>
+                        <div style="color: #666; font-size: 14px;">Credit Payment Receipt</div>
+                    </div>
+                    <span class="receipt-status status-paid">💰 PAID</span>
+                </div>
+                <div class="receipt-details">
+                    <div class="detail-item">
+                        <span class="detail-label">FARMER</span>
+                        <span class="detail-value">Alice Farmer</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DATE</span>
+                        <span class="detail-value">Jan 17, 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DESCRIPTION</span>
+                        <span class="detail-value">Credit Payment - Monthly Installment</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">CREDIT ID</span>
+                        <span class="detail-value">#CRD-789</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="approval-badge">
+                        ✓ Approved by Bob Finance
+                    </div>
+                    <div class="receipt-amount">$500.00</div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="download-button" onclick="downloadReceipt('RCP-1002')">📥 Download PDF</button>
+                </div>
+            </div>
+            
+            <!-- Receipt 3 - Training -->
+            <div class="receipt-card">
+                <div class="receipt-header">
+                    <div>
+                        <div class="receipt-number">Receipt #RCP-1003</div>
+                        <div style="color: #666; font-size: 14px;">Training Course Receipt</div>
+                    </div>
+                    <span class="receipt-status status-approved">✓ APPROVED</span>
+                </div>
+                <div class="receipt-details">
+                    <div class="detail-item">
+                        <span class="detail-label">FARMER</span>
+                        <span class="detail-value">John Smith</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DATE</span>
+                        <span class="detail-value">Jan 16, 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DESCRIPTION</span>
+                        <span class="detail-value">Organic Farming Certification</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">APPOINTMENT ID</span>
+                        <span class="detail-value">#APT-567</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="approval-badge">
+                        ✓ Approved by Bob Finance
+                    </div>
+                    <div class="receipt-amount">$150.00</div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="download-button" onclick="downloadReceipt('RCP-1003')">📥 Download PDF</button>
+                </div>
+            </div>
+            
+            <!-- Receipt 4 - Supplier -->
+            <div class="receipt-card">
+                <div class="receipt-header">
+                    <div>
+                        <div class="receipt-number">Receipt #RCP-1004</div>
+                        <div style="color: #666; font-size: 14px;">Supplier Payment Receipt</div>
+                    </div>
+                    <span class="receipt-status status-paid">💰 PAID</span>
+                </div>
+                <div class="receipt-details">
+                    <div class="detail-item">
+                        <span class="detail-label">SUPPLIER</span>
+                        <span class="detail-value">AgriSupply Co.</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DATE</span>
+                        <span class="detail-value">Jan 15, 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">DESCRIPTION</span>
+                        <span class="detail-value">Bulk Seeds Supply - 500kg</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">SUPPLY ID</span>
+                        <span class="detail-value">#SUP-445</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="approval-badge">
+                        ✓ Approved by Bob Finance
+                    </div>
+                    <div class="receipt-amount">$2,500.00</div>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button class="download-button" onclick="downloadReceipt('RCP-1004')">📥 Download PDF</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2024 Apollo Agriculture. All rights reserved.</p>
+            <p>Comprehensive Receipt Management System</p>
+        </footer>
+    </div>
+    
+    <script>
+        function downloadReceipt(receiptNumber) {
+            alert(`Downloading receipt ${receiptNumber} as PDF...`);
+            // In production, this would generate and download a PDF receipt
+        }
+    </script>
+</body>
+</html>
