@@ -8,6 +8,8 @@ import '../../models/appointment_model.dart';
 import '../../utils/helpers.dart';
 import '../credits/credit_list_screen.dart';
 import '../appointments/payment_requests_screen.dart';
+import 'invoice_approval_screen.dart';
+import 'order_approval_screen.dart';
 
 class FinanceHomeScreen extends StatefulWidget {
   const FinanceHomeScreen({Key? key}) : super(key: key);
@@ -120,6 +122,20 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
+                  MaterialPageRoute(builder: (context) => const OrderApprovalScreen()),
+                );
+              },
+              icon: const Icon(Icons.shopping_bag),
+              label: const Text('Approve Orders'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
                   MaterialPageRoute(builder: (context) => const PaymentRequestsScreen()),
                 );
               },
@@ -127,6 +143,20 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen> {
               label: const Text('View Payment Requests'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const InvoiceApprovalScreen()),
+                );
+              },
+              icon: const Icon(Icons.receipt_long),
+              label: const Text('View Supplier Invoices'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
               ),
             ),
           ],

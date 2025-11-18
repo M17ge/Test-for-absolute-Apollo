@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/product_provider.dart';
+import '../../providers/cart_provider.dart';
 import '../../models/product_model.dart';
 import '../../utils/helpers.dart';
 
@@ -46,6 +47,8 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -60,7 +63,17 @@ class ProductCard extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.image, size: 40, color: Colors.grey),
+              child: product.imageUrls.isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        product.imageUrls.first,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.image, size: 40, color: Colors.grey),
+                      ),
+                    )
+                  : const Icon(Icons.image, size: 40, color: Colors.grey),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -82,25 +95,77 @@ class ProductCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    AppHelpers.formatCurrency(product.price),
+                    '${AppHelpers.formatCurrency(product.price)} / ${product.unit}',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(
-                    'Stock: ${product.stockQuantity} ${product.unit}',
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Row(
+                    children: [
+                      Text(
+                        'Stock: ${product.stockQuantity} ${product.unit}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      if (product.stockQuantity == 0) ...[
+                        const SizedBox(width: 8),
+                        const Chip(
+                          label: Text('OUT OF STOCK', style: TextStyle(fontSize: 10)),
+                          backgroundColor: Colors.red,
+                          labelStyle: TextStyle(color: Colors.white),
+                        ),
+                      ] else if (product.stockQuantity < 10) ...[
+                        const SizedBox(width: 8),
+                        const Chip(
+                          label: Text('LOW STOCK', style: TextStyle(fontSize: 10)),
+                          backgroundColor: Colors.orange,
+                          labelStyle: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ],
                   ),
                 ],
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.add_shopping_cart),
-              onPressed: () {
-                // Add to cart
-                AppHelpers.showSnackBar(context, 'Added to cart');
-              },
+            Column(
+              children: [
+                if (cartProvider.isInCart(product.id))
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green[50],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'In cart: ${cartProvider.getItemQuantity(product.id)}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.green[700],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                IconButton(
+                  icon: Icon(
+                    cartProvider.isInCart(product.id)
+                        ? Icons.add_circle
+                        : Icons.add_shopping_cart,
+                  ),
+                  onPressed: product.stockQuantity > 0
+                      ? () {
+                          cartProvider.addToCart(product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${product.name} added to cart'),
+                              duration: const Duration(seconds: 1),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                      : null,
+                  color: cartProvider.isInCart(product.id) ? Colors.green : null,
+                ),
+              ],
             ),
           ],
         ),

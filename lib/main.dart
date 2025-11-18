@@ -9,6 +9,7 @@ import 'providers/product_provider.dart';
 import 'providers/order_provider.dart';
 import 'providers/credit_provider.dart';
 import 'providers/appointment_provider.dart';
+import 'providers/cart_provider.dart';
 import 'utils/theme.dart';
 
 void main() async {
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => CreditProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: MaterialApp(
         title: 'Apollo Agro',

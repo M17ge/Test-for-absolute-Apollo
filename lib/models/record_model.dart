@@ -1,6 +1,7 @@
 enum RecordType {
   orderCreated,
   orderUpdated,
+  orderApproval,
   creditRequested,
   creditApproved,
   creditRejected,
@@ -17,6 +18,10 @@ enum RecordType {
   userCreated,
   userUpdated,
   receiptGenerated,
+  restockRequest,
+  restockApproval,
+  restockRejection,
+  invoiceApproval,
 }
 
 class ActivityRecord {
