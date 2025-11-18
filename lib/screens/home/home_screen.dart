@@ -9,6 +9,7 @@ import '../supplier/supplier_home_screen.dart';
 import '../driver/driver_home_screen.dart';
 import '../dispatch/dispatch_home_screen.dart';
 import '../trainer/trainer_home_screen.dart';
+import '../service_manager/service_manager_home_screen.dart';
 import '../admin/admin_home_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -43,6 +44,8 @@ class HomeScreen extends StatelessWidget {
         return const DispatchHomeScreen();
       case UserRole.trainer:
         return const TrainerHomeScreen();
+      case UserRole.serviceManager:
+        return const ServiceManagerHomeScreen();
       case UserRole.admin:
         return const AdminHomeScreen();
       default:

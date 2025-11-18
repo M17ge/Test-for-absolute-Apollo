@@ -140,4 +140,17 @@ class AppointmentService {
       rethrow;
     }
   }
+
+  Future<void> assignTrainer(String appointmentId, String trainerId, String trainerName) async {
+    try {
+      await _firestore.collection(_collection).doc(appointmentId).update({
+        'trainerId': trainerId,
+        'trainerName': trainerName,
+        'status': AppointmentStatus.confirmed.toString().split('.').last,
+      });
+    } catch (e) {
+      print('Assign trainer error: $e');
+      rethrow;
+    }
+  }
 }

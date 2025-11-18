@@ -6,6 +6,7 @@ enum UserRole {
   driver,
   dispatchManager,
   trainer,
+  serviceManager,
   admin
 }
 
