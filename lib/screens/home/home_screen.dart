@@ -48,8 +48,6 @@ class HomeScreen extends StatelessWidget {
         return const ServiceManagerHomeScreen();
       case UserRole.admin:
         return const AdminHomeScreen();
-      default:
-        return const FarmerHomeScreen();
     }
   }
 }

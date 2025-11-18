@@ -7,7 +7,8 @@ class ReceiptService {
 
   Future<String> createReceipt(Receipt receipt) async {
     try {
-      final docRef = await _firestore.collection(_collection).add(receipt.toMap());
+      final docRef =
+          await _firestore.collection(_collection).add(receipt.toMap());
       return docRef.id;
     } catch (e) {
       print('Create receipt error: $e');
@@ -65,6 +66,23 @@ class ReceiptService {
     }
   }
 
+  Future<List<Receipt>> getReceiptsByType(ReceiptType type) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection(_collection)
+          .where('type', isEqualTo: type.toString().split('.').last)
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => Receipt.fromMap(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      print('Get receipts by type error: $e');
+      return [];
+    }
+  }
+
   Future<Receipt?> getReceiptById(String id) async {
     try {
       final doc = await _firestore.collection(_collection).doc(id).get();
@@ -87,7 +105,8 @@ class ReceiptService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        return Receipt.fromMap(querySnapshot.docs.first.data(), querySnapshot.docs.first.id);
+        return Receipt.fromMap(
+            querySnapshot.docs.first.data(), querySnapshot.docs.first.id);
       }
     } catch (e) {
       print('Get receipt by entity error: $e');
@@ -95,7 +114,8 @@ class ReceiptService {
     return null;
   }
 
-  Future<void> approveReceipt(String receiptId, String financeManagerId, String financeManagerName) async {
+  Future<void> approveReceipt(String receiptId, String financeManagerId,
+      String financeManagerName) async {
     try {
       await _firestore.collection(_collection).doc(receiptId).update({
         'status': ReceiptStatus.approved.toString().split('.').last,

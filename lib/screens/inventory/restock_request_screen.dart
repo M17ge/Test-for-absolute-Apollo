@@ -86,16 +86,16 @@ class _RestockRequestScreenState extends State<RestockRequestScreen> {
           type: RecordType.restockRequest,
           userId: user.id,
           userName: user.name,
-          description:
-              'Requested restock for ${_selectedProduct!.name} - ${_quantityController.text} units',
-          relatedEntityId: requestId,
-          timestamp: DateTime.now(),
-          metadata: {
+          userRole: user.role,
+          entityId: requestId,
+          entityType: 'restockRequest',
+          details: {
             'productId': _selectedProduct!.id,
             'productName': _selectedProduct!.name,
             'quantity': int.parse(_quantityController.text),
             'proposedPrice': double.parse(_priceController.text),
           },
+          timestamp: DateTime.now(),
         ),
       );
 
@@ -181,28 +181,36 @@ class _RestockRequestScreenState extends State<RestockRequestScreen> {
                             children: [
                               Text(
                                 'Current Stock Information',
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Quantity:'),
                                   Text(
                                     '${_selectedProduct!.stockQuantity} ${_selectedProduct!.unit}',
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Price per unit:'),
                                   Text(
-                                    AppHelpers.formatCurrency(_selectedProduct!.price),
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                    AppHelpers.formatCurrency(
+                                        _selectedProduct!.price),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -278,10 +286,15 @@ class _RestockRequestScreenState extends State<RestockRequestScreen> {
                               ),
                               Text(
                                 AppHelpers.formatCurrency(
-                                  (int.tryParse(_quantityController.text) ?? 0) *
-                                      (double.tryParse(_priceController.text) ?? 0),
+                                  (int.tryParse(_quantityController.text) ??
+                                          0) *
+                                      (double.tryParse(_priceController.text) ??
+                                          0),
                                 ),
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.green[700],
                                     ),

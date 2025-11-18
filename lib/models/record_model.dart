@@ -1,3 +1,5 @@
+import 'user_model.dart';
+
 enum RecordType {
   orderCreated,
   orderUpdated,
@@ -18,6 +20,7 @@ enum RecordType {
   userCreated,
   userUpdated,
   receiptGenerated,
+  receiptGeneration,
   restockRequest,
   restockApproval,
   restockRejection,
@@ -65,7 +68,8 @@ class ActivityRecord {
       entityId: map['entityId'] ?? '',
       entityType: map['entityType'] ?? '',
       details: Map<String, dynamic>.from(map['details'] ?? {}),
-      timestamp: DateTime.parse(map['timestamp'] ?? DateTime.now().toIso8601String()),
+      timestamp:
+          DateTime.parse(map['timestamp'] ?? DateTime.now().toIso8601String()),
       notes: map['notes'],
     );
   }

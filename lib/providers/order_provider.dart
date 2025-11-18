@@ -20,9 +20,9 @@ class OrderProvider with ChangeNotifier {
 
     try {
       if (userId != null) {
-        _orders = await _orderService.getOrdersByUser(userId);
+        _orders = (await _orderService.getOrdersByUser(userId)).cast<Order>();
       } else {
-        _orders = await _orderService.getAllOrders();
+        _orders = (await _orderService.getAllOrders()).cast<Order>();
       }
     } catch (e) {
       print('Load orders error: $e');
@@ -33,7 +33,8 @@ class OrderProvider with ChangeNotifier {
   }
 
   void addToCart(OrderItem item) {
-    final existingIndex = _cart.indexWhere((i) => i.productId == item.productId);
+    final existingIndex =
+        _cart.indexWhere((i) => i.productId == item.productId);
     if (existingIndex >= 0) {
       final existing = _cart[existingIndex];
       _cart[existingIndex] = OrderItem(
@@ -84,6 +85,11 @@ class OrderProvider with ChangeNotifier {
       print('Place order error: $e');
       return false;
     }
+  }
+
+  // Alias for compatibility
+  Future<bool> createOrder(Order order) async {
+    return await placeOrder(order);
   }
 
   Future<bool> updateOrderStatus(String orderId, OrderStatus status) async {

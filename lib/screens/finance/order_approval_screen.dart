@@ -29,7 +29,7 @@ class _OrderApprovalScreenState extends State<OrderApprovalScreen> {
       final orders = await _orderService.getPendingOrders();
       if (mounted) {
         setState(() {
-          _pendingOrders = orders;
+          _pendingOrders = orders.cast<Order>();
           _isLoading = false;
         });
       }
@@ -96,7 +96,8 @@ class _OrderApprovalScreenState extends State<OrderApprovalScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.shopping_bag, size: 100, color: Colors.grey),
+                      const Icon(Icons.shopping_bag,
+                          size: 100, color: Colors.grey),
                       const SizedBox(height: 16),
                       Text(
                         'No pending orders',
@@ -154,7 +155,8 @@ class _OrderApprovalScreenState extends State<OrderApprovalScreen> {
             const Divider(height: 24),
             _buildInfoRow('Customer', order.farmerName),
             _buildInfoRow('Items', '${order.items.length} products'),
-            _buildInfoRow('Total Amount', AppHelpers.formatCurrency(order.totalAmount)),
+            _buildInfoRow(
+                'Total Amount', AppHelpers.formatCurrency(order.totalAmount)),
             _buildInfoRow('Delivery Address', order.deliveryAddress),
             _buildInfoRow(
               'Order Date',

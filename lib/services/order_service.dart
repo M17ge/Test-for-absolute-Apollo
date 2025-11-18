@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import '../models/order_model.dart';
+import '../models/user_model.dart';
 import 'product_service.dart';
 import 'receipt_service.dart';
 import 'record_service.dart';
@@ -7,7 +8,8 @@ import '../models/receipt_model.dart';
 import '../models/record_model.dart';
 
 class OrderService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final firestore.FirebaseFirestore _firestore =
+      firestore.FirebaseFirestore.instance;
   final String _collection = 'orders';
   final _productService = ProductService();
   final _receiptService = ReceiptService();
@@ -77,17 +79,18 @@ class OrderService {
 
   Future<String> createOrder(Order order) async {
     try {
-      final docRef = await _firestore.collection(_collection).add(order.toMap());
-      
+      final docRef =
+          await _firestore.collection(_collection).add(order.toMap());
+
       // Reduce stock for each product in the order
       for (final item in order.items) {
         final product = await _productService.getProductById(item.productId);
         if (product != null) {
           final newStock = product.stockQuantity - item.quantity;
-          await _productService.updateStock(item.productId, newStock);
+          await _productService.updateStock(item.productId, newStock.toInt());
         }
       }
-      
+
       return docRef.id;
     } catch (e) {
       print('Create order error: $e');
@@ -120,31 +123,33 @@ class OrderService {
     try {
       // Update order status to confirmed
       await updateOrderStatus(orderId, OrderStatus.confirmed);
-      
+
       // Get order details
       final order = await getOrderById(orderId);
       if (order == null) return;
-      
+
       // Generate receipt
       final receipt = Receipt(
         id: '',
-        type: ReceiptType.farmer,
+        type: ReceiptType.order,
+        entityId: orderId,
         relatedEntityId: orderId,
+        farmerId: order.farmerId,
+        farmerName: order.farmerName,
         amount: order.totalAmount,
         description: 'Order payment for ${order.items.length} items',
         status: ReceiptStatus.approved,
         createdAt: DateTime.now(),
+        lineItems: {'items': order.items.length, 'orderId': orderId},
         issuedTo: order.farmerName,
-        issuedToId: order.farmerId,
         issuedBy: financeManagerName,
-        issuedById: financeManagerId,
         financeManagerId: financeManagerId,
         financeManagerName: financeManagerName,
         financeManagerApprovedAt: DateTime.now(),
       );
-      
+
       await _receiptService.createReceipt(receipt);
-      
+
       // Create activity record
       await _recordService.createRecord(
         ActivityRecord(
@@ -152,8 +157,15 @@ class OrderService {
           type: RecordType.orderApproval,
           userId: financeManagerId,
           userName: financeManagerName,
-          description: 'Approved payment for order by ${order.farmerName}',
-          relatedEntityId: orderId,
+          userRole: UserRole.financeManager,
+          entityId: orderId,
+          entityType: 'order',
+          details: {
+            'orderId': orderId,
+            'farmerId': order.farmerId,
+            'farmerName': order.farmerName,
+            'amount': order.totalAmount,
+          },
           timestamp: DateTime.now(),
         ),
       );

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
 class AppHelpers {
   // Format currency
@@ -46,14 +47,16 @@ class AppHelpers {
   }
 
   // Calculate credit total with interest
-  static double calculateCreditTotal(double amount, double interestRate, int months) {
+  static double calculateCreditTotal(
+      double amount, double interestRate, int months) {
     final monthlyRate = interestRate / 100 / 12;
     final totalInterest = amount * monthlyRate * months;
     return amount + totalInterest;
   }
 
   // Calculate monthly payment
-  static double calculateMonthlyPayment(double amount, double interestRate, int months) {
+  static double calculateMonthlyPayment(
+      double amount, double interestRate, int months) {
     final total = calculateCreditTotal(amount, interestRate, months);
     return total / months;
   }

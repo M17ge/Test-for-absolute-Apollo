@@ -1,16 +1,6 @@
-enum ReceiptType {
-  order,
-  credit,
-  appointment,
-  supplierPayment
-}
+enum ReceiptType { order, credit, appointment, supplier, supplierPayment }
 
-enum ReceiptStatus {
-  pending,
-  approved,
-  paid,
-  cancelled
-}
+enum ReceiptStatus { pending, approved, paid, cancelled }
 
 class Receipt {
   final String id;
@@ -30,6 +20,10 @@ class Receipt {
   final String description;
   final Map<String, dynamic> lineItems;
   final String? notes;
+  final String? relatedEntityId;
+  final String? issuedTo;
+  final String? issuedBy;
+  final DateTime? financeManagerApprovedAt;
 
   Receipt({
     required this.id,
@@ -49,6 +43,10 @@ class Receipt {
     required this.description,
     required this.lineItems,
     this.notes,
+    this.relatedEntityId,
+    this.issuedTo,
+    this.issuedBy,
+    this.financeManagerApprovedAt,
   });
 
   factory Receipt.fromMap(Map<String, dynamic> map, String id) {
@@ -70,12 +68,20 @@ class Receipt {
       ),
       financeManagerId: map['financeManagerId'],
       financeManagerName: map['financeManagerName'],
-      createdAt: DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
-      approvedAt: map['approvedAt'] != null ? DateTime.parse(map['approvedAt']) : null,
+      createdAt:
+          DateTime.parse(map['createdAt'] ?? DateTime.now().toIso8601String()),
+      approvedAt:
+          map['approvedAt'] != null ? DateTime.parse(map['approvedAt']) : null,
       paidAt: map['paidAt'] != null ? DateTime.parse(map['paidAt']) : null,
       description: map['description'] ?? '',
       lineItems: Map<String, dynamic>.from(map['lineItems'] ?? {}),
       notes: map['notes'],
+      relatedEntityId: map['relatedEntityId'],
+      issuedTo: map['issuedTo'],
+      issuedBy: map['issuedBy'],
+      financeManagerApprovedAt: map['financeManagerApprovedAt'] != null
+          ? DateTime.parse(map['financeManagerApprovedAt'])
+          : null,
     );
   }
 
@@ -97,6 +103,10 @@ class Receipt {
       'description': description,
       'lineItems': lineItems,
       'notes': notes,
+      'relatedEntityId': relatedEntityId,
+      'issuedTo': issuedTo,
+      'issuedBy': issuedBy,
+      'financeManagerApprovedAt': financeManagerApprovedAt?.toIso8601String(),
     };
   }
 }

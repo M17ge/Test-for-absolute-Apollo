@@ -32,12 +32,18 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Alias for compatibility
+  Future<void> fetchProducts() async {
+    await loadProducts();
+  }
+
   void filterByCategory(ProductCategory? category) {
     _selectedCategory = category;
     if (category == null) {
       _filteredProducts = List.from(_products);
     } else {
-      _filteredProducts = _products.where((p) => p.category == category).toList();
+      _filteredProducts =
+          _products.where((p) => p.category == category).toList();
     }
     notifyListeners();
   }
@@ -48,7 +54,7 @@ class ProductProvider with ChangeNotifier {
     } else {
       _filteredProducts = _products.where((p) {
         return p.name.toLowerCase().contains(query.toLowerCase()) ||
-               p.description.toLowerCase().contains(query.toLowerCase());
+            p.description.toLowerCase().contains(query.toLowerCase());
       }).toList();
     }
     notifyListeners();

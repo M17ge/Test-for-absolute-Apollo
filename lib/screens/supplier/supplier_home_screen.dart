@@ -67,15 +67,24 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
       final receipt = Receipt(
         id: '',
         type: ReceiptType.supplier,
+        entityId: request.id,
         relatedEntityId: request.id,
+        farmerId: request.inventoryManagerId,
+        farmerName: request.inventoryManagerName,
+        supplierId: user.id,
+        supplierName: user.name,
         amount: request.totalAmount,
-        description: 'Restock: ${request.productName} - ${request.requestedQuantity} units',
+        description:
+            'Restock: ${request.productName} - ${request.requestedQuantity} units',
         status: ReceiptStatus.pending,
         createdAt: DateTime.now(),
+        lineItems: {
+          'productId': request.productId,
+          'productName': request.productName,
+          'quantity': request.requestedQuantity,
+        },
         issuedTo: request.inventoryManagerName,
-        issuedToId: request.inventoryManagerId,
         issuedBy: user.name,
-        issuedById: user.id,
       );
 
       final receiptId = await _receiptService.createReceipt(receipt);
@@ -90,8 +99,15 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
           type: RecordType.restockApproval,
           userId: user.id,
           userName: user.name,
-          description: 'Approved restock request for ${request.productName}',
-          relatedEntityId: request.id,
+          userRole: user.role,
+          entityId: request.id,
+          entityType: 'restockRequest',
+          details: {
+            'requestId': request.id,
+            'productName': request.productName,
+            'quantity': request.requestedQuantity,
+            'receiptId': receiptId,
+          },
           timestamp: DateTime.now(),
         ),
       );
@@ -165,8 +181,16 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
               type: RecordType.restockRejection,
               userId: user.id,
               userName: user.name,
-              description: 'Rejected restock request for ${request.productName}',
-              relatedEntityId: request.id,
+              userRole: user.role,
+              entityId: request.id,
+              entityType: 'restockRequest',
+              details: {
+                'requestId': request.id,
+                'productName': request.productName,
+                'reason': reasonController.text.isNotEmpty
+                    ? reasonController.text
+                    : 'No reason provided',
+              },
               timestamp: DateTime.now(),
             ),
           );
@@ -224,7 +248,8 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.local_shipping, size: 100, color: Colors.grey),
+                      const Icon(Icons.local_shipping,
+                          size: 100, color: Colors.grey),
                       const SizedBox(height: 16),
                       Text(
                         'No pending restock requests',
@@ -268,15 +293,18 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
                   ),
                 ),
                 Chip(
-                  label: Text(request.status.toString().split('.').last.toUpperCase()),
+                  label: Text(
+                      request.status.toString().split('.').last.toUpperCase()),
                   backgroundColor: Colors.orange,
-                  labelStyle: const TextStyle(color: Colors.white, fontSize: 10),
+                  labelStyle:
+                      const TextStyle(color: Colors.white, fontSize: 10),
                 ),
               ],
             ),
             const Divider(height: 24),
             _buildInfoRow('Quantity', '${request.requestedQuantity} units'),
-            _buildInfoRow('Price per Unit', AppHelpers.formatCurrency(request.proposedPrice)),
+            _buildInfoRow('Price per Unit',
+                AppHelpers.formatCurrency(request.proposedPrice)),
             _buildInfoRow(
               'Total Amount',
               AppHelpers.formatCurrency(request.totalAmount),
@@ -347,4 +375,3 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
     );
   }
 }
-

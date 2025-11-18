@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/receipt_model.dart';
-import '../../models/restock_request_model.dart';
 import '../../services/receipt_service.dart';
 import '../../services/restock_request_service.dart';
 import '../../services/product_service.dart';
@@ -34,9 +33,11 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
   Future<void> _loadPendingInvoices() async {
     setState(() => _isLoading = true);
     try {
-      final receipts = await _receiptService.getReceiptsByType(ReceiptType.supplier);
-      final pending = receipts.where((r) => r.status == ReceiptStatus.pending).toList();
-      
+      final receipts =
+          await _receiptService.getReceiptsByType(ReceiptType.supplier);
+      final pending =
+          receipts.where((r) => r.status == ReceiptStatus.pending).toList();
+
       if (mounted) {
         setState(() {
           _pendingInvoices = pending;
@@ -69,7 +70,7 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
 
       // Get restock request
       final restockRequest = await _restockService.getRestockRequestById(
-        receipt.relatedEntityId,
+        receipt.relatedEntityId ?? receipt.entityId,
       );
 
       if (restockRequest != null) {
@@ -87,9 +88,15 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
             type: RecordType.invoiceApproval,
             userId: user.id,
             userName: user.name,
-            description:
-                'Approved invoice for ${restockRequest.productName} restock',
-            relatedEntityId: receipt.id,
+            userRole: user.role,
+            entityId: receipt.id,
+            entityType: 'receipt',
+            details: {
+              'receiptId': receipt.id,
+              'restockRequestId': restockRequest.id,
+              'productName': restockRequest.productName,
+              'amount': receipt.amount,
+            },
             timestamp: DateTime.now(),
           ),
         );
@@ -128,7 +135,7 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
 
       // Get restock request
       final restockRequest = await _restockService.getRestockRequestById(
-        receipt.relatedEntityId,
+        receipt.relatedEntityId ?? receipt.entityId,
       );
 
       if (restockRequest != null) {
@@ -136,9 +143,11 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
         await _restockService.markAsDispatched(restockRequest.id);
 
         // Update product stock
-        final product = await _productService.getProductById(restockRequest.productId);
+        final product =
+            await _productService.getProductById(restockRequest.productId);
         if (product != null) {
-          final newStock = product.stockQuantity + restockRequest.requestedQuantity;
+          final newStock =
+              product.stockQuantity + restockRequest.requestedQuantity;
           await _productService.updateStock(restockRequest.productId, newStock);
 
           // Mark restock as completed
@@ -152,9 +161,15 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
             type: RecordType.receiptGeneration,
             userId: user.id,
             userName: user.name,
-            description:
-                'Generated receipt and updated stock for ${restockRequest.productName}',
-            relatedEntityId: receipt.id,
+            userRole: user.role,
+            entityId: receipt.id,
+            entityType: 'receipt',
+            details: {
+              'receiptId': receipt.id,
+              'restockRequestId': restockRequest.id,
+              'productName': restockRequest.productName,
+              'amount': receipt.amount,
+            },
             timestamp: DateTime.now(),
           ),
         );
@@ -200,7 +215,8 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.receipt_long, size: 100, color: Colors.grey),
+                      const Icon(Icons.receipt_long,
+                          size: 100, color: Colors.grey),
                       const SizedBox(height: 16),
                       Text(
                         'No pending invoices',
@@ -260,8 +276,8 @@ class _InvoiceApprovalScreenState extends State<InvoiceApprovalScreen> {
             const Divider(height: 24),
             _buildInfoRow('Description', invoice.description),
             _buildInfoRow('Amount', AppHelpers.formatCurrency(invoice.amount)),
-            _buildInfoRow('Issued To', invoice.issuedTo),
-            _buildInfoRow('Issued By', invoice.issuedBy),
+            _buildInfoRow('Issued To', invoice.issuedTo ?? 'N/A'),
+            _buildInfoRow('Issued By', invoice.issuedBy ?? 'N/A'),
             _buildInfoRow(
               'Created',
               AppHelpers.formatDate(invoice.createdAt),
